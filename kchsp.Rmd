@@ -1,0 +1,33 @@
+---
+title: "King's County House Price Prediction"
+author: "Atin Maiti"
+date: "March 10, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r include = FALSE}
+setwd('E:/House Price Prediction')
+data <- read.csv('kc_house_data.csv')
+library(dplyr)
+library(DataExplorer)
+```
+
+
+```{r}
+summary(data)
+```
+
+## Exploratory Data Analysis
+
+```{r warning=FALSE}
+plot_str(data)
+
+plot_histogram(data)
+
+plot_correlation(data)
+```
+
