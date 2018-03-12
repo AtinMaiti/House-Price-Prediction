@@ -94,3 +94,9 @@ Model2<- lm(log(price) ~ log(sqft_living15) + bedrooms*bathrooms + view*as.facto
 
 summary(Model2)
 
+##2 hypothesis is not supported by the data and we accept the null hypothesis, that view and waterfront has no interaction, #1 on the other hand interaction of bed and bath is positive, bedroom alone has a negative correlation but bedroom with bathroom will have a positive correlation.
+
+par(mfrow = c(2,2))
+plot(Model2)
+
+## Model2 is better than any of the model because it considers pratical knowhow and OLS assupmtions. We could compare the all the models using AIC BIC metrics.
