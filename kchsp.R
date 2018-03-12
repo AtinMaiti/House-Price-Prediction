@@ -32,7 +32,7 @@ plot_correlation(data)
 # bathrooms
 
 
-#Before testing if the OLS assumption stands true lets try to run a kitchen sink model.
+#Before testing if the OLS assumptions stands true lets try to run a kitchen sink model.
 KSmodel1<- lm(formula = price ~  sqft_living15 + lat + sqft_above + grade + view + waterfront + floors + waterfront + sqft_living + bedrooms + bathrooms, data = data)
 
 summary(model1)
@@ -57,40 +57,40 @@ vif(KSmodel1)
 #sqft_living and sqft_above has value more than 5 so we will remove it
 
 #Kitchen Sink Model 2
-KSmodel2 <- lm(formula = price ~  sqft_living15 + lat + grade + view + waterfront + floors + waterfront + bedrooms + bathrooms, data = data)
+KSmodel2 <- lm(formula = price ~  sqft_living15 + lat + grade + view + waterfront + floors + bedrooms + bathrooms, data = data)
 summary(KSmodel2)
-vif(KSmodel2)
+
+#Second Test: We know that there might be auto-correlation, but there was not so much data to provide evidence Real estate price increases year over year due to inflation. 
+#Third Test: All the factors are dependent with grade, so have to exclude this variable.
 
 #Before we jump into further assumptions we would like to see that if all the IV have normal distribution if not we will apply tranformations.
 #ignoring bedrooms, bathrooms, waterfront, view, and floors as they are discrete variables
-par(mfrow = c(1,3))
-hist(log(sqft_living15))
+par(mfrow = c(2,3))
+
+hist(sqft_living15)
 hist(lat)
 hist(grade)
 
-## List of Hypothesis, I believe in parsimonious model:
-1.
+## List of Hypothesis, I believe in parsimonious models:
+# 1. bathrooms with bedrooms might have more predicting power than bathrooms and bedrooms.
+# 2. The house which has been viewed and has waterfront will have higher price.
 
 
-#Second Test 
-hist(log(sqft_living))
-plot(log(price) ~ log(sqft_living))
+#Let's just plot a scatterplot for price vs sqft_living15
+plot(log(price) ~ log(sqft_living15))
+abline(lm(log(price) ~ log(sqft_living15), data= data), col ='red')
 
-hist(yr_built)
 
-plot(k)
+#parsimonious model
+Model1<-lm(log(price) ~ log(sqft_living15), data= data)
+summary(Model1)
 
-mean(price)
+# Homoskedastic and Normal, So this is a good model but doesnot explains the non linearity towards the extreme ends.
+par(mfrow = c(2,2))
+plot(Model1)
 
-boxplot(price)
+#Model that fits our hypothesis
+Model2<- lm(log(price) ~ log(sqft_living15) + bedrooms*bathrooms + view*as.factor(waterfront), data= data)
 
-VIF(data)
+summary(Model2)
 
-#m1 <- lm(log(price) ~ log(sqft_living) + bedrooms*bathrooms + view + waterfront + yr_built)
-m <- lm(log(price) ~ log(sqft_living))  
-
-summary(m)
-
-plot(m)
-
-interaction.plot(bedrooms, bathrooms , price)
